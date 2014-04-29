@@ -74,4 +74,13 @@ Keystone Linux: Installing Arch
 	- umount -R /mnt
 	- reboot
 	
-13 steps for a base installation of Arch.
+13 steps for a base installation of Arch. After that, I set up Aura to install everything else:
+
+###Aura
+
+	- wget https://aur.archlinux.org/packages/au/aura-bin/aura-bin.tar.gz
+	- tar xvzf aura-bin.tar.gz
+	- cd aura-bin
+	- makepkg -csi
+	
+Aura supports the same modifiers as pacman (-S, -Syyu, -Rsc, etc) but also supports the AUR (-A) and package downgrades (-B and -Br).
