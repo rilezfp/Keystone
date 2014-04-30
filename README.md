@@ -1,4 +1,4 @@
-Keystone Linux: Installing Arch
+git psudoKeystone Linux: Installing Arch
 ---
 
 ###Partition/Format Drive:
@@ -99,8 +99,8 @@ Aura supports the same modifiers as pacman (-S, -Syyu, -Rsc, etc) but also suppo
 	[infinality-bundle-fonts]
 	Server = http://bohoomil.com/repo/fonts
 	
-	- pacman-key -r 962DDE58
-	- pacman-key --lsign-key 962DDE58
+	- sudo pacman-key -r 962DDE58
+	- sudo pacman-key --lsign-key 962DDE58
 	- sudo aura -Syyu
 	- sudo aura -S infinality-bundle infinality-bundle-multilib ibfonts-meta-base ibfonts-meta-extended
 	
