@@ -72,7 +72,7 @@ Keystone Linux: Installing Arch
 
 	- exit
 	- umount -R /mnt
-	- rebootgit 
+	- reboot
 	
 13 steps for a base installation of Arch. After that, I set up Aura to install everything else:
 
