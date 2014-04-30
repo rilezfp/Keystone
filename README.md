@@ -1,4 +1,4 @@
-git psudoKeystone Linux: Installing Arch
+Keystone Linux: Installing Arch
 ---
 
 ###Partition/Format Drive:
@@ -72,7 +72,7 @@ git psudoKeystone Linux: Installing Arch
 
 	- exit
 	- umount -R /mnt
-	- reboot
+	- rebootgit 
 	
 13 steps for a base installation of Arch. After that, I set up Aura to install everything else:
 
