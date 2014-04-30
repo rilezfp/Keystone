@@ -3,8 +3,6 @@ chromium-libpdf
 chromium-pepper-flash
 desmume
 dropbox
-ffmpeg-full
-gnome-defaults-list
 gnome-exe-thumbnailer
 google-chrome-dev
 gtk-theme-orion-git
@@ -18,6 +16,4 @@ numix-icon-theme-git
 numix-themes-git
 pencil
 sozi
-ttf-google-fonts-git
-ttf-tahoma
 zukitwo-themes
