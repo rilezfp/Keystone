@@ -84,3 +84,25 @@ Keystone Linux: Installing Arch
 	- makepkg -csi
 	
 Aura supports the same modifiers as pacman (-S, -Syyu, -Rsc, etc) but also supports the AUR (-A) and package downgrades (-B and -Br).
+
+###Font Rendering
+
+	- gedit /etc/pacman.conf
+	- Add the following repositories:
+	
+	[infinality-bundle]
+	Server = http://bohoomil.com/repo/$arch
+
+	[infinality-bundle-multilib]
+	Server = http://bohoomil.com/repo/multilib/$arch
+
+	[infinality-bundle-fonts]
+	Server = http://bohoomil.com/repo/fonts
+	
+	- pacman-key -r 962DDE58
+	- pacman-key --lsign-key 962DDE58
+	- sudo aura -Syyu
+	- sudo aura -S infinality-bundle infinality-bundle-multilib ibfonts-meta-base ibfonts-meta-extended
+	
+	
+	
