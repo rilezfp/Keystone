@@ -114,16 +114,19 @@ Aura supports the same modifiers as pacman (-S, -Syyu, -Rsc, etc) but also suppo
 	- sudo aura -Syyu
 	- sudo aura -S infinality-bundle infinality-bundle-multilib ibfonts-meta-base ibfonts-meta-extended
 	
-	Note: We are still testing these patched libraries. Default font rendering might be sufficient, but fonts won't look right by default. If you're not using Infiniality, you will need to configure your fonts. Refer here for now:
+Note: We are still testing these patched libraries. Default font rendering might be sufficient, but fonts won't look right by default. If you're not using Infiniality, you will need to configure your fonts. Refer here for now:
 
-	https://wiki.archlinux.org/index.php/Font_configuration
+https://wiki.archlinux.org/index.php/Font_configuration
 
 ###Install packages
 	
-	- Back up your packages. (sudo aura -B)
-	- Repositories (sudo aura -S): https://github.com/rilezfp/Keystone/blob/master/repository
-	- AUR (sudo aura -A): https://github.com/rilezfp/Keystone/blob/master/AUR
-	- Infiniality specific fonts: https://github.com/rilezfp/Keystone/blob/master/infinality
+Back up your packages before you make major system changes. (sudo aura -B)
+
+Repositories (sudo aura -S): https://github.com/rilezfp/Keystone/blob/master/repository
+
+AUR (sudo aura -A): https://github.com/rilezfp/Keystone/blob/master/AUR
+
+Infiniality specific fonts: https://github.com/rilezfp/Keystone/blob/master/infinality
 
 	
 	
