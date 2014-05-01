@@ -25,13 +25,13 @@ Keystone Linux: Installing Arch
 ###Install:
 	
 	- nano /etc/pacman.conf
-	- uncomment multilib
+	- Uncomment [multilib], then save.
 	- pacstrap -i /mnt base base-devel git wget openssh
 	
 ###Generate fstab:
 
 	- genfstab -U -p /mnt >> /mnt/etc/fstab
-	- nano /mnt/etc/fstab (to check)
+	- nano /mnt/etc/fstab (Make sure your partitions are there.)
 	
 ###Chroot:
 
@@ -40,7 +40,7 @@ Keystone Linux: Installing Arch
 ###Locale:
 
 	- nano /etc/locale.gen
-	- uncomment en_US.UTF-8
+	- Uncomment en_US.UTF-8, save.
 	- locale-gen
 	- echo LANG=en_US.UTF-8 > /etc/locale.conf
 	- export LANG=en_US.UTF-8
@@ -56,7 +56,7 @@ Keystone Linux: Installing Arch
 	
 ###Network:
 
-	- systemctl enable dhcpcd.service (remember to disable after installing NetworkManager)
+	- systemctl enable dhcpcd.service (Disable this after installing NetworkManager)
 
 ###Root Password:
 
@@ -74,7 +74,17 @@ Keystone Linux: Installing Arch
 	- umount -R /mnt
 	- reboot
 	
-13 steps for a base installation of Arch. After that, I set up Aura to install everything else:
+13 steps for a basic installation of Arch. When it's done, you will need to uncomment [multilib] again (nano /etc/pacman.conf). After that, set up your user account, and install Aura for package management:
+
+###User
+
+	- useradd -m -g users -G wheel -s /bin/bash usernamehere
+	- chfn usernamehere
+	- passwd usernamehere
+	- nano /etc/sudoers
+	- Uncomment, allow group 'wheel' to execute commands. Save.
+	- exit
+	- Continue installing packages with your user account.
 
 ###Aura
 
@@ -103,6 +113,18 @@ Aura supports the same modifiers as pacman (-S, -Syyu, -Rsc, etc) but also suppo
 	- sudo pacman-key --lsign-key 962DDE58
 	- sudo aura -Syyu
 	- sudo aura -S infinality-bundle infinality-bundle-multilib ibfonts-meta-base ibfonts-meta-extended
+	
+	Note: We are still testing these patched libraries. Default font rendering might be sufficient, but fonts won't look right by default. If you're not using Infiniality, you will need to configure your fonts. Refer here for now:
+
+	https://wiki.archlinux.org/index.php/Font_configuration
+
+###Install packages
+	
+	- Back up your packages. (sudo aura -B)
+	- Repositories (sudo aura -S): https://github.com/rilezfp/Keystone/blob/master/repository
+	- AUR (sudo aura -A): https://github.com/rilezfp/Keystone/blob/master/AUR
+	- Infiniality specific fonts: https://github.com/rilezfp/Keystone/blob/master/infinality
+
 	
 	
 	
