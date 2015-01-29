@@ -1,5 +1,7 @@
 adwaita-icon-theme
+awesome
 bc
+bspwm
 dmidecode
 ffmpeg
 firefox
@@ -17,6 +19,7 @@ gst-plugins-good
 gst-plugins-ugly
 gstreamer0.10
 gstreamer0.10-plugins
+i3
 lib32-giflib
 lib32-gnutls
 lib32-libpng
@@ -45,6 +48,7 @@ polkit-gnome
 rsync
 scrot
 steam
+sxhkd
 transmission-cli
 xf86-input-keyboard
 xf86-input-mouse
@@ -54,3 +58,5 @@ xorg-input-joystick
 xorg-server
 xorg-server-utils
 xorg-xinit
+
+sudo pacman -S adwaita-icon-theme awesome bc bspwm dmidecode ffmpeg firefox frei0r-plugins gimp gnome-backgrounds gnome-themes-standard go gparted gst-libav gst-plugins-bad gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-ugly gstreamer0.10 gstreamer0.10-plugins i3 lib32-giflib lib32-gnutls lib32-libpng lib32-libxml2 lib32-mpg123 lib32-nvidia-utils lib32-openal libbluray libdmapsharing libdvdcss libdvdnav libdvdread libgnome-keyring libmtp libquicktime librsvg libva-vdpau-driver mesa nfs-utils ntp nvidia opus pkgstats playonlinux polkit-gnome rsync scrot steam sxhkd transmission-cli xf86-input-keyboard xf86-input-mouse xf86-input-synaptics xorg-apps xorg-input-joystick xorg-server xorg-server-utils xorg-xinit
