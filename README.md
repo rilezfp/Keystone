@@ -1,98 +1,100 @@
 Arch Linux Installation
 ---
 
-###1. Partition:
+###PARTITION
 	
-	- parted /dev/sdX
-	- mklabel gpt
-	- mkpart ESP fat32 1M 513M
-	- set 1 boot on
-	- mkpart primary btrfs 513M 100%
+	parted /dev/sdX
+	mklabel gpt
+	mkpart ESP fat32 1M 513M
+	set 1 boot on
+	mkpart primary btrfs 513M 100%
 
-###2. Mount:
+###MOUNT
 
-	- mount /dev/sda2 /mnt
-	- mkdir /mnt/boot
-	- mount /dev/sda1 /mnt/boot
+	mount /dev/sda2 /mnt
+	mkdir /mnt/boot
+	mount /dev/sda1 /mnt/boot
 	
-###3. Sort mirrorlist:
+###MIRRORLIST
 
-	- cp -vf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-	- pacman -Syy reflector
-	- reflector --verbose --country 'United States' -l 200 -p http --sort rate --save /etc/pacman.d/mirrorlist
+	cp -vf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+	pacman -Syy reflector
+	reflector --verbose --country 'United States' -l 200 -p http --sort rate --save /etc/pacman.d/mirrorlist
 	
-###4. Install:
+###INSTALL
 	
-	- nano /etc/pacman.conf
-	- Uncomment [multilib], then save.
-	- pacstrap -i /mnt base base-devel curl efibootmgr gawk git grep gzip lynx openssh reflector sed vim wget
+	nano /etc/pacman.conf
+	Uncomment [multilib], then save.
+	pacstrap -i /mnt base base-devel curl efibootmgr gawk git grep gzip lynx openssh reflector sed vim wget
 	
-###5. Generate fstab:
+###FSTAB
 
-	- genfstab -U -p /mnt >> /mnt/etc/fstab
-	- nano /mnt/etc/fstab (Make sure your partitions are there.)
+	genfstab -U -p /mnt >> /mnt/etc/fstab
+	nano /mnt/etc/fstab (Make sure your partitions are there.)
 	
-###6. chroot:
+###CHROOT
 
-	- arch-chroot /mnt /bin/bash
+	arch-chroot /mnt /bin/bash
 	
-###7. Set locale:
+###LOCALE
 
-	- nano /etc/locale.gen
-	- Uncomment en_US.UTF-8, save.
-	- locale-gen
-	- echo LANG=en_US.UTF-8 > /etc/locale.conf
-	- export LANG=en_US.UTF-8
+	nano /etc/locale.gen
+	Uncomment en_US.UTF-8, save.
+	locale-gen
+	echo LANG=en_US.UTF-8 > /etc/locale.conf
+	export LANG=en_US.UTF-8
 	
-###8. Set timezone:
+###TIMEZONE
 
-	- ln -s /usr/share/zoneinfo/America/New_York /etc/localtime
-	- hwclock --systohc --utc
+	ln -s /usr/share/zoneinfo/America/New_York /etc/localtime
+	hwclock --systohc --utc
 
-###9. Set hostname:
+###HOSTNAME
 
-	- echo keystone > /etc/hostname
+	echo hostname > /etc/hostname
+	nano /etc/hosts
+	Add hostname to /etc/hosts file.
 	
-###10. Enable network:
+###NETWORK
 
-	- systemctl enable dhcpcd.service
+	systemctl enable dhcpcd.service
 
-###11. Set root password:
+###ROOT
 
-	- passwd
+	passwd
 	
-###12. Enable efibootmgr:
+###EFIBOOTMGR
 
-	- efibootmgr -d /dev/sda -p 1 -c -L "Arch Linux" -l /EFI/arch/vmlinuz-linux -u "root=/dev/sda2 rw quiet loglevel=3 rd.udev.log-priority=3 initrd=/EFI/arch/initramfs-linux.img"
+	efibootmgr -d /dev/sda -p 1 -c -L "Arch Linux" -l /EFI/arch/vmlinuz-linux -u "root=/dev/sda2 rw quiet loglevel=3 rd.udev.log-priority=3 initrd=/EFI/arch/initramfs-linux.img"
 	
-###13. Reboot:
+###REBOOT
 
-	- exit
-	- umount -R /mnt
-	- reboot
+	exit
+	umount -R /mnt
+	reboot
 	
-Arch is installed. Uncomment [multilib] again. Then:
+Arch is installed. Uncomment [multilib] again.
 
-###Create user account
+###USER
 
-	- useradd -m -G wheel -s /bin/bash username
-	- chfn username
-	- passwd username
-	- visudo
-	- Allow group 'wheel' to execute commands.
-	- exit
-	- Continue installing packages with your user account.
+	useradd -m -G wheel -s /bin/bash username
+	chfn username
+	passwd username
+	visudo
+	Allow group 'wheel' to execute commands.
+	exit
+	Continue installing packages with your user account.
 
-###Aura
+###AURA
 
-	- wget https://aur.archlinux.org/packages/au/aura-bin/aura-bin.tar.gz
-	- tar xvzf aura-bin.tar.gz
-	- cd aura-bin
-	- makepkg -csi
+	wget https://aur.archlinux.org/packages/au/aura-bin/aura-bin.tar.gz
+	tar xvzf aura-bin.tar.gz
+	cd aura-bin
+	makepkg -csi
 
-###Install packages
+###PACKAGES
 
-Repositories (sudo aura -S): https://github.com/rilezfp/Keystone/blob/master/repository
+Repositories:https://github.com/rilezfp/Keystone/blob/master/repository
 
 AUR (sudo aura -A): https://github.com/rilezfp/Keystone/blob/master/AUR
 
