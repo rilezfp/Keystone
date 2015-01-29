@@ -8,6 +8,8 @@ Arch Linux Installation
 	mkpart ESP fat32 1M 513M
 	set 1 boot on
 	mkpart primary btrfs 513M 100%
+	mkfs.vfat -F32 /dev/sda1
+	mkfs.btrfs /dev/sda2
 
 ###MOUNT
 
@@ -24,9 +26,7 @@ Arch Linux Installation
 ###INSTALL
 	
 	nano /etc/pacman.conf
-	
-	Uncomment [multilib], then save.
-	
+	Uncomment [multilib]
 	pacstrap -i /mnt base base-devel curl efibootmgr gawk git grep gzip lynx openssh reflector sed vim wget
 	
 ###FSTAB
@@ -41,9 +41,7 @@ Arch Linux Installation
 ###LOCALE
 
 	nano /etc/locale.gen
-	
-	Uncomment en_US.UTF-8, save.
-	
+	Uncomment en_US.UTF-8
 	locale-gen
 	echo LANG=en_US.UTF-8 > /etc/locale.conf
 	export LANG=en_US.UTF-8
@@ -57,8 +55,6 @@ Arch Linux Installation
 
 	echo hostname > /etc/hostname
 	nano /etc/hosts
-	
-	Add hostname to /etc/hosts file.
 	
 ###NETWORK
 
@@ -78,7 +74,7 @@ Arch Linux Installation
 	umount -R /mnt
 	reboot
 	
-Arch is installed. Uncomment [multilib] again.
+Arch is installed. Uncomment [multilib] and run reflector.
 
 ###USER
 
@@ -86,9 +82,6 @@ Arch is installed. Uncomment [multilib] again.
 	chfn username
 	passwd username
 	visudo
-	
-	Allow group 'wheel' to execute commands.
-	
 	exit
 
 ###AURA
