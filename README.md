@@ -24,13 +24,15 @@ Arch Linux Installation
 ###INSTALL
 	
 	nano /etc/pacman.conf
+	
 	Uncomment [multilib], then save.
+	
 	pacstrap -i /mnt base base-devel curl efibootmgr gawk git grep gzip lynx openssh reflector sed vim wget
 	
 ###FSTAB
 
 	genfstab -U -p /mnt >> /mnt/etc/fstab
-	nano /mnt/etc/fstab (Make sure your partitions are there.)
+	nano /mnt/etc/fstab
 	
 ###CHROOT
 
@@ -39,7 +41,9 @@ Arch Linux Installation
 ###LOCALE
 
 	nano /etc/locale.gen
+	
 	Uncomment en_US.UTF-8, save.
+	
 	locale-gen
 	echo LANG=en_US.UTF-8 > /etc/locale.conf
 	export LANG=en_US.UTF-8
@@ -53,6 +57,7 @@ Arch Linux Installation
 
 	echo hostname > /etc/hostname
 	nano /etc/hosts
+	
 	Add hostname to /etc/hosts file.
 	
 ###NETWORK
@@ -81,9 +86,10 @@ Arch is installed. Uncomment [multilib] again.
 	chfn username
 	passwd username
 	visudo
+	
 	Allow group 'wheel' to execute commands.
+	
 	exit
-	Continue installing packages with your user account.
 
 ###AURA
 
@@ -94,11 +100,9 @@ Arch is installed. Uncomment [multilib] again.
 
 ###PACKAGES
 
-Repositories:https://github.com/rilezfp/Keystone/blob/master/repository
+Official - https://github.com/rilezfp/Keystone/blob/master/repository
 
-AUR (sudo aura -A): https://github.com/rilezfp/Keystone/blob/master/AUR
-
-Infiniality specific fonts: https://github.com/rilezfp/Keystone/blob/master/infinality
+AUR - https://github.com/rilezfp/Keystone/blob/master/AUR
 
 	
 	
