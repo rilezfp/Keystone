@@ -1,43 +1,42 @@
-Keystone Linux: Installing Arch
+Arch Linux Installation
 ---
 
-###Partition/Format Drive:
+###1. Partition:
 	
-  	-cgdisk /dev/sda
-		- N -> enter -> 512M -> enter -> ef00 -> enter (efi)
-		- N -> enter -> enter -> enter (root)
-	- mkfs.fat -F32 /dev/sda1
-	- mkfs.btrfs /dev/sda2
+	- parted /dev/sdX
+	- mklabel gpt
+	- mkpart ESP fat32 1M 513M
+	- set 1 boot on
+	- mkpart primary btrfs 513M 100%
 
-###Mount Drive:
+###2. Mount:
 
 	- mount /dev/sda2 /mnt
-	- mkdir /mnt/home
-	- mount /dev/sda2 /mnt/home
 	- mkdir /mnt/boot
 	- mount /dev/sda1 /mnt/boot
 	
-###Set mirrors:
+###3. Sort mirrorlist:
 
+	- cp -vf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 	- pacman -Syy reflector
 	- reflector --verbose --country 'United States' -l 200 -p http --sort rate --save /etc/pacman.d/mirrorlist
 	
-###Install:
+###4. Install:
 	
 	- nano /etc/pacman.conf
 	- Uncomment [multilib], then save.
-	- pacstrap -i /mnt base base-devel git wget openssh
+	- pacstrap -i /mnt base base-devel curl efibootmgr gawk git grep gzip lynx openssh reflector sed vim wget
 	
-###Generate fstab:
+###5. Generate fstab:
 
 	- genfstab -U -p /mnt >> /mnt/etc/fstab
 	- nano /mnt/etc/fstab (Make sure your partitions are there.)
 	
-###Chroot:
+###6. chroot:
 
 	- arch-chroot /mnt /bin/bash
 	
-###Locale:
+###7. Set locale:
 
 	- nano /etc/locale.gen
 	- Uncomment en_US.UTF-8, save.
@@ -45,44 +44,42 @@ Keystone Linux: Installing Arch
 	- echo LANG=en_US.UTF-8 > /etc/locale.conf
 	- export LANG=en_US.UTF-8
 	
-###Time:
+###8. Set timezone:
 
 	- ln -s /usr/share/zoneinfo/America/New_York /etc/localtime
 	- hwclock --systohc --utc
 
-###Hostname:
+###9. Set hostname:
 
 	- echo keystone > /etc/hostname
 	
-###Network:
+###10. Enable network:
 
-	- systemctl enable dhcpcd.service (Disable this after installing NetworkManager)
+	- systemctl enable dhcpcd.service
 
-###Root Password:
+###11. Set root password:
 
 	- passwd
 	
-###GRUB:
+###12. Enable efibootmgr:
 
-	- pacman -S grub efibootmgr
-	- grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Keystone --recheck
-	- grub-mkconfig -o /boot/grub/grub.cfg
+	- efibootmgr -d /dev/sda -p 1 -c -L "Arch Linux" -l /EFI/arch/vmlinuz-linux -u "root=/dev/sda2 rw quiet loglevel=3 rd.udev.log-priority=3 initrd=/EFI/arch/initramfs-linux.img"
 	
-###Reboot:
+###13. Reboot:
 
 	- exit
 	- umount -R /mnt
 	- reboot
 	
-13 steps for a basic installation of Arch. When it's done, you will need to uncomment [multilib] again (nano /etc/pacman.conf). After that, set up your user account, and install Aura for package management:
+Arch is installed. Uncomment [multilib] again. Then:
 
-###User
+###Create user account
 
-	- useradd -m -g users -G wheel -s /bin/bash usernamehere
-	- chfn usernamehere
-	- passwd usernamehere
-	- nano /etc/sudoers
-	- Uncomment, allow group 'wheel' to execute commands. Save.
+	- useradd -m -G wheel -s /bin/bash username
+	- chfn username
+	- passwd username
+	- visudo
+	- Allow group 'wheel' to execute commands.
 	- exit
 	- Continue installing packages with your user account.
 
@@ -92,35 +89,8 @@ Keystone Linux: Installing Arch
 	- tar xvzf aura-bin.tar.gz
 	- cd aura-bin
 	- makepkg -csi
-	
-Aura supports the same modifiers as pacman (-S, -Syyu, -Rsc, etc) but also supports the AUR (-A) and package downgrades (-B and -Br).
-
-###Font Rendering
-
-	- gedit /etc/pacman.conf
-	- Add the following repositories:
-	
-	[infinality-bundle]
-	Server = http://bohoomil.com/repo/$arch
-
-	[infinality-bundle-multilib]
-	Server = http://bohoomil.com/repo/multilib/$arch
-
-	[infinality-bundle-fonts]
-	Server = http://bohoomil.com/repo/fonts
-	
-	- sudo pacman-key -r 962DDE58
-	- sudo pacman-key --lsign-key 962DDE58
-	- sudo aura -Syyu
-	- sudo aura -S infinality-bundle infinality-bundle-multilib ibfonts-meta-base ibfonts-meta-extended
-	
-Note: We are still testing these patched libraries. Default font rendering might be sufficient, but fonts won't look right by default. If you're not using Infiniality, you will need to configure your fonts. Refer here for now:
-
-https://wiki.archlinux.org/index.php/Font_configuration
 
 ###Install packages
-	
-Back up your packages before you make major system changes. (sudo aura -B)
 
 Repositories (sudo aura -S): https://github.com/rilezfp/Keystone/blob/master/repository
 
