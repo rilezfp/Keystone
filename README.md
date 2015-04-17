@@ -17,17 +17,13 @@ Arch Linux Installation
 	mkdir /mnt/boot
 	mount /dev/sda1 /mnt/boot
 	
-###MIRRORLIST
-
-	cp -vf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-	pacman -Syy reflector
-	reflector --verbose --country 'United States' -l 200 -p http --sort rate --save /etc/pacman.d/mirrorlist
-	
 ###INSTALL
 	
 	nano /etc/pacman.conf
 	Uncomment [multilib]
-	pacstrap -i /mnt base base-devel curl efibootmgr gawk git grep gzip lynx openssh reflector sed vim wget
+	nano /etc/pacman.d/mirrorlist
+	Select mirror of choice
+	pacstrap -i /mnt base base-devel curl efibootmgr git openssh reflector vim wget
 	
 ###FSTAB
 
@@ -66,15 +62,9 @@ Arch Linux Installation
 	
 ###EFIBOOTMGR
 
-	efibootmgr -d /dev/sda -p 1 -c -L "Arch Linux" -l /EFI/arch/vmlinuz-linux -u "root=/dev/sda2 rw quiet loglevel=3 rd.udev.log-priority=3 initrd=/EFI/arch/initramfs-linux.img"
+	efibootmgr -d /dev/sda -p 1 -c -L "Arch Linux QEMU" -l vmlinuz-linux -u "root=/dev/sda2 rw quiet loglevel=0 rd.udev.log-priority=3 intel_iommu=on pci-stub.ids=10de:1189,10de:0e0a initrd=initramfs-linux.img"
 	
-###REBOOT
-
-	exit
-	umount -R /mnt
-	reboot
-	
-Arch is installed. Uncomment [multilib] and run reflector.
+	Arch is installed.
 
 ###USER
 
@@ -84,19 +74,40 @@ Arch is installed. Uncomment [multilib] and run reflector.
 	visudo
 	exit
 
+###MIRRORLIST
+
+	cp -vf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+	pacman -Syy reflector
+	reflector --verbose --country 'United States' -l 200 -p http --sort rate --save /etc/pacman.d/mirrorlist
+
 ###AURA
 
 	wget https://aur.archlinux.org/packages/au/aura-bin/aura-bin.tar.gz
 	tar xvzf aura-bin.tar.gz
 	cd aura-bin
 	makepkg -csi
+	
+###MKINITCPIO
+
+	nano /etc/mkinitcpio.conf
+	Add pci-stub to modules, remove fsck from hook.
+	Copy the files systemd-fsck-root.service and systemd-fsck@.service located at /usr/lib/systemd/system/ to /etc/systemd/system/
+	StandardOutput=null
+	StandardError=journal+console
+	mkinitcpio -p linux
+	
+###REBOOT
+
+	exit
+	umount -R /mnt
+	reboot
 
 ###PACKAGES
 
 Official - https://github.com/rilezfp/Keystone/blob/master/repository
-
 AUR - https://github.com/rilezfp/Keystone/blob/master/AUR
 
-	
+Disable dhcpcd and setup NetworkManager.service + bridge0
+
 	
 	
