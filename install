@@ -1,0 +1,89 @@
+#!/bin/bash
+
+arch_chroot() {
+    arch-chroot /mnt /bin/bash
+}
+  
+echo -n "\nHEY STUPID, THIS SCRIPT WILL WIPE YOUR DRIVE.\nPress [ENTER] to continue:"
+read
+echo "\nPartioning disk:\n";sleep 1
+parted /dev/sda mklabel gpt
+parted /dev/sda mkpart ESP fat32 1M 513M
+parted /dev/sda set 1 boot on
+parted /dev/sda mkpart primary ext4 513M 100%
+
+echo "\nFormatting disk:\n";sleep 1
+mkfs.vfat -F32 -n EFI /dev/sda1
+mkfs.ext4 -L Arch /dev/sda2
+
+echo "\nMounting drives:\n";sleep 1
+mount /dev/sda2 /mnt
+mkdir /mnt/boot
+mount /dev/sda1 /mnt/boot
+
+echo "Enabling multilib:\n";sleep 1
+    
+ARCHI=`uname -m` 
+ 
+check_multilib(){ 
+    if [[ $ARCHI == x86_64 ]]; then
+        local _has_multilib=`grep -n "\[multilib\]" /etc/pacman.conf | cut -f1 -d:`
+        sed -i "${_has_multilib}s/^#//" /etc/pacman.conf
+        local _has_multilib=$(( ${_has_multilib} + 1 ))
+        sed -i "${_has_multilib}s/^#//" /etc/pacman.conf
+        echo "\nMultilib Enabled.\n"
+    fi
+  } 
+
+check_multilib
+
+echo "\nSetting mirrors:\n";sleep 1
+cp -vf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+git clone https://github.com/rilezfp/mirrorlist.git
+cp mirrorlist/mirrorlist /etc/pacman.d/mirrorlist
+
+echo "\nInstalling Arch Linux:\n";sleep 1
+pacstrap -i /mnt base base-devel parted ntp curl efibootmgr git openssh reflector vim wget
+
+echo "\nGenerating /mnt/etc/fstab:\n";sleep 1
+genfstab -U -p /mnt >> /mnt/etc/fstab
+cat /etc/fstab;sleep 5
+
+echo "\nSelect Locale:\n";sleep 1
+arch_chroot nano /etc/locale.gen
+arch_chroot locale-gen
+arch_chroot echo LANG=en_US.UTF-8 > /etc/locale.conf
+arch_chroot export LANG=en_US.UTF-8
+
+echo "\nSetting clock:\n";sleep 1
+arch_chroot ln -s /usr/share/zoneinfo/America/New_York /etc/localtime
+arch_chroot hwclock --systohc --utc
+
+echo "\nSetting hostname Eos:\n";sleep 1
+arch_chroot echo Eos > /etc/hostname
+arch_chroot nano /etc/hosts 
+
+echo "\nEnabling DHCPCD:\n";sleep 1
+arch_chroot systemctl enable dhcpcd.service
+
+echo "\nSelect a root password:\n";sleep 1
+arch_chroot passwd
+
+echo "\nEFIBOOTMGR:\n";sleep 1
+arch_chroot efibootmgr -d /dev/sda -p 1 -c -L "Arch Linux" -l vmlinuz-linux -u "root=/dev/sda2 rw quiet loglevel=0 rd.udev.log-priority=3 intel_iommu=on pci-stub.ids=10de:1189,10de:0e0a elevator=noop initrd=initramfs-linux.img"
+
+echo "\nSelecting mirror based on speed:\n";sleep 1
+arch_chroot cp -vf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+arch_chroot pacman -Syy reflector
+arch_chroot reflector --verbose --country 'United States' -l 200 -p http --sort rate --save /etc/pacman.d/mirrorlist
+
+echo "\nAdd pci-stub to modules:\n";sleep 1
+arch_chroot nano /etc/mkinitcpio.conf
+arch_chroot mkinitcpio -p linux
+
+umount -R /mnt
+echo "\nINSTALL SCRIPT FINISHED. THANKS FOR PLAYING.\n";sleep 5
+reboot
+
+
+
