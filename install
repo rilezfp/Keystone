@@ -72,7 +72,7 @@ arch_chroot passwd
 echo "\nEFIBOOTMGR:\n";sleep 1
 arch_chroot efibootmgr -d /dev/sda -p 1 -c -L "Arch Linux" -l vmlinuz-linux -u "root=/dev/sda2 rw quiet loglevel=0 rd.udev.log-priority=3 intel_iommu=on pci-stub.ids=10de:1189,10de:0e0a elevator=noop initrd=initramfs-linux.img"
 
-echo "\nSelecting mirror based on speed:\n";sleep 1
+echo "\nSelecting mirrors:\n";sleep 1
 arch_chroot cp -vf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 arch_chroot pacman -Syy reflector
 arch_chroot reflector --verbose --country 'United States' -l 200 -p http --sort rate --save /etc/pacman.d/mirrorlist
