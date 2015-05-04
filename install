@@ -43,11 +43,12 @@ git clone https://github.com/rilezfp/mirrorlist.git
 cp mirrorlist/mirrorlist /etc/pacman.d/mirrorlist
 
 echo "\nInstalling Arch Linux:\n";sleep 1
-pacstrap -i /mnt base base-devel parted ntp curl efibootmgr git openssh reflector vim wget
+pacstrap -i /mnt base base-devel parted ntp curl efibootmgr git openssh reflector vim wget util-linux
 
 echo "\nGenerating /mnt/etc/fstab:\n";sleep 1
 genfstab -U -p /mnt >> /mnt/etc/fstab
-cat /etc/fstab;sleep 5
+echo "\nAppend 'discard' flag to fstab:\n";sleep 3
+nano /mnt/etc/fstab
 
 echo "\nSelect Locale:\n";sleep 1
 arch_chroot nano /etc/locale.gen
