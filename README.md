@@ -110,4 +110,4 @@ AUR - https://github.com/rilezfp/Keystone/blob/master/AUR
 Disable dhcpcd and setup NetworkManager.service + bridge0
 
 nvidia-xconfig --add-argb-glx-visuals --allow-glx-with-composite --composite -no-logo --render-accel -o /etc/X11/xorg.conf
-	
+
